@@ -11,3 +11,11 @@
 <p align="left">Website ini dirancang oleh Digital Forte Indonesia untuk memberikan aksesibilitas penuh bagi publik dalam mengenal identitas dan layanan perusahaan. Melalui antarmuka yang intuitif dan navigasi yang efisien, platform ini mencerminkan komitmen perusahaan terhadap efektivitas digital, sekaligus menjadi sarana edukasi mengenai bagaimana solusi teknologi mereka dapat mengoptimalkan berbagai sektor bisnis.</p>
 
 ###
+
+<h2 align="left">Cara Instalasi</h2>
+
+###
+
+<p align="left">$git clone https://github.com/Arf-012/digital-forte-indonesia.git<br><br>$cd digital-forte-indonesia<br><br>$npm install<br><br>$npm run dev</p>
+
+###
