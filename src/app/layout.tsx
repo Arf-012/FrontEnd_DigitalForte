@@ -1,20 +1,22 @@
-import Navigation from '../../components/layout/Navigation';
-import Footer from '../../components/layout/Footer';
-import './globals.css';
+import type { Metadata } from 'next'
+import Navigation from 'components/layouts/Navigation'
+import './globals.css'
+
+export const metadata: Metadata = {
+  title: 'Digital Forte Indonesia',
+  description: 'Digital Forte Indonesia - Digital Marketing Agency',
+}
 
 export default function RootLayout({
-  children, 
+  children,
 }: {
   children: React.ReactNode
 }) {
   return (
     <html lang="en">
       <body>
-        <Navigation />  
-        <main>
-          {children}  
-        </main>
-        <Footer />  
+        <Navigation />
+        <main>{children}</main>
       </body>
     </html>
   )
