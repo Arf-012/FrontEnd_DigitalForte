@@ -1,37 +1,41 @@
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-12">
-      <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-3 gap-8">
-          <div>
-            <h3 className="font-bold text-xl mb-4">Digital Forte Indonesia</h3>
-            <p className="text-gray-400">
-              Professional digital solutions for your business
-            </p>
+    <footer className="bg-white py-8 px-8">
+        <div className="max-w-10xl mx-auto bg-[#16161D] text-white py-16 px-8">
+          <div className="grid md:grid-cols-3 gap-16 text-sm">
+            <div>
+              <h3 className="text-[#AD1E23] font-bold text-xl leading-tight">
+                Digital
+                <br />
+                Forte
+                <br />
+                Indonesia
+              </h3>
+            </div>
+
+            <div>
+              <p className="text-[#AD1E23] mb-3 font-medium">
+                Official Contact
+              </p>
+              <p className="mb-1">+62 858 1211 2594</p>
+              <p className="mb-1">digitalforteindonesia</p>
+              <p className="text-gray-400">Our Website</p>
+            </div>
+
+            <div>
+              <p className="text-[#AD1E23] mb-3 font-medium">
+                Official Contacts
+              </p>
+              <p className="mb-1">+62 858 1211 2594</p>
+              <p className="mb-1">digitalforteindonesia</p>
+              <p className="text-gray-400">Our Address</p>
+            </div>
           </div>
-          
-          <div>
-            <h4 className="font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li><a href="/about">About Us</a></li>
-              <li><a href="/contact">Contact</a></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h4 className="font-semibold mb-4">Contact</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li>Email: info@digitalforte.id</li>
-              <li>Phone: +62 812 3456 7890</li>
-              <li>Jakarta, Indonesia</li>
-            </ul>
-          </div>
+
+          <p className="text-center text-xs text-gray-500 mt-12">
+            Digital Forte Indonesia, 2024. All Rights Reserved
+          </p>
         </div>
-        
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; 2024 Digital Forte Indonesia. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
+      </footer>
   )
 }
