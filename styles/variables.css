@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+.vertical-line {
+  border-bottom: 2px solid red;
+  height: 100px;
+}

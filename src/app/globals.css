@@ -12,6 +12,9 @@
   --color-background: var(--color-white);
   --color-foreground: var(--color-black);
   --font-sans: "IBM Plex Sans", sans-serif;
+  --accent-line-height: 2px;
+  --accent-line-width: 140px;
+  --accent-line-spacing: 24px;
 }
 
 body {
@@ -28,4 +31,21 @@ body {
 
 input[type="radio"]:checked + label + .accordion-content {
   display: block;
+}
+
+/* Accent Line */
+
+.accent-line {
+  position: relative;
+  display: inline-block;
+}
+
+.accent-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px; 
+  width: var(--accent-line-width);
+  height: var(--accent-line-height);
+  background-color: var(--color-red);
 }

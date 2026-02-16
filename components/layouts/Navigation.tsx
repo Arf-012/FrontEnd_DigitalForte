@@ -1,47 +1,65 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function Navigation() {
-  const [isVisible, setIsVisible] = useState(true)
-  const [lastScrollY, setLastScrollY] = useState(0)
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isNavOpen, setIsNavOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY
-      
+      const currentScrollY = window.scrollY;
+
       if (currentScrollY > lastScrollY && currentScrollY > 50) {
         // Scrolling down
-        setIsVisible(false)
+        setIsVisible(false);
       } else {
         // Scrolling up
-        setIsVisible(true)
+        setIsVisible(true);
       }
-      
-      setLastScrollY(currentScrollY)
-    }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [lastScrollY])
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
+  useEffect(() => {
+    const checkbox = document.getElementById("nav-toggle") as HTMLInputElement;
+
+    const handleChange = () => {
+      setIsNavOpen(checkbox?.checked || false);
+    };
+
+    checkbox?.addEventListener("change", handleChange);
+    return () => checkbox?.removeEventListener("change", handleChange);
+  }, []);
+
+  const closeNav = () => {
+    const checkbox = document.getElementById("nav-toggle") as HTMLInputElement;
+    if (checkbox) checkbox.checked = false
+    setIsNavOpen(false);
+  };
 
   return (
     <div className="relative">
       <input type="checkbox" id="nav-toggle" className="hidden peer" />
-      
+
       <label htmlFor="nav-toggle" className="cursor-pointer block">
-        <div 
+        <div
           className={`h-16 bg-[#AD1E23] flex items-center justify-center fixed top-0 left-0 right-0 z-40 transition-transform duration-300 ${
-            isVisible ? 'translate-y-0' : '-translate-y-full'
+            isVisible ? "translate-y-0" : "-translate-y-full"
           }`}
         >
           <div className="relative w-10 h-10 hover:scale-110 transition-transform">
-            <Image 
-              src="/dfi.png" 
-              alt="Digital Forte Indonesia" 
+            <Image
+              src="/dfi.png"
+              alt="Digital Forte Indonesia"
               fill
               className="object-contain"
             />
@@ -50,8 +68,14 @@ export default function Navigation() {
       </label>
 
       {/* FULLSCREEN NAVBAR OVERLAY */}
-      <div className="hidden peer-checked:flex fixed inset-0 z-50">
-        <label 
+      <div
+        className={`flex fixed inset-0 z-50 transition-opacity duration-300 ${
+          isNavOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+      >
+        <label
           htmlFor="nav-toggle"
           className="absolute top-8 right-8 w-12 h-12 bg-white text-[#AD1E23] flex items-center justify-center text-2xl font-light hover:bg-gray-100 transition-colors cursor-pointer z-10"
         >
@@ -61,13 +85,14 @@ export default function Navigation() {
         {/* Grid of navigation items with background images */}
         <div className="w-full h-full grid grid-rows-2">
           {/* Top section - Home */}
-          <Link 
-            href="/" 
+          <Link
+            href="/"
+            onClick={closeNav}
             className="relative flex items-center justify-center overflow-hidden group"
           >
             <div className="absolute inset-0 bg-[#AD1E23] mix-blend-multiply z-[1]"></div>
-            <img 
-              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200" 
+            <img
+              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200"
               alt="Home"
               className="absolute inset-0 w-full h-full object-cover"
             />
@@ -79,13 +104,14 @@ export default function Navigation() {
           {/* Bottom section - 3 columns */}
           <div className="grid grid-cols-3">
             {/* Certificates */}
-            <Link 
-              href="/certificates" 
+            <Link
+              href="/certificates"
+              onClick={closeNav}
               className="relative flex items-center justify-center overflow-hidden group"
             >
               <div className="absolute inset-0 bg-[#AD1E23] mix-blend-multiply z-[1]"></div>
-              <img 
-                src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800" 
+              <img
+                src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800"
                 alt="Certificates"
                 className="absolute inset-0 w-full h-full object-cover"
               />
@@ -95,13 +121,14 @@ export default function Navigation() {
             </Link>
 
             {/* Portfolio */}
-            <Link 
-              href="/portfolio" 
+            <Link
+              href="/portfolio"
+              onClick={closeNav}
               className="relative flex items-center justify-center overflow-hidden group"
             >
               <div className="absolute inset-0 bg-[#AD1E23] mix-blend-multiply z-[1]"></div>
-              <img 
-                src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800" 
+              <img
+                src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800"
                 alt="Portfolio"
                 className="absolute inset-0 w-full h-full object-cover"
               />
@@ -111,13 +138,14 @@ export default function Navigation() {
             </Link>
 
             {/* About Us */}
-            <Link 
-              href="/about" 
+            <Link
+              href="/about"
+              onClick={closeNav}
               className="relative flex items-center justify-center overflow-hidden group"
             >
               <div className="absolute inset-0 bg-[#AD1E23] mix-blend-multiply z-[1]"></div>
-              <img 
-                src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800" 
+              <img
+                src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800"
                 alt="About Us"
                 className="absolute inset-0 w-full h-full object-cover"
               />
@@ -129,5 +157,5 @@ export default function Navigation() {
         </div>
       </div>
     </div>
-  )
+  );
 }
