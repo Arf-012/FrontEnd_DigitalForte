@@ -104,41 +104,42 @@ export default function Portfolio() {
             ))}
           </div>
 
-          {/* Expandable Details Section Below */}
-          <div
-            className={`overflow-hidden transition-all duration-500 border-2 border-[#AD1E23] ${
-              selectedProject
-                ? "opacity-100 max-h-200 ease-out"
-                : "opacity-0 max-h-0 border-0 ease-in"
-            }`}
-          >
-            <div className="bg-white">
-              <div className="grid md:grid-cols-2 gap-12 p-12">
-                {/* Left Side - Description */}
-                <div className="flex flex-col justify-start">
-                  <p className="text-[#AD1E23] leading-relaxed text-base">
-                    {selectedProject?.description}
-                  </p>
-                </div>
-                {/* Right Side - Gallery Images */}
-                <div className="space-y-4">
-                  {selectedProject?.gallery.map((gallery, index) => (
-                    <div
-                      key={index}
-                      className="rounded-lg overflow-hidden shadow-lg relative h-64"
-                    >
-                      <Image
-                        src={gallery}
-                        alt={`${selectedProject.title} Gallery ${index + 1}`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
+          <section>
+            <div
+              className={`overflow-hidden transition-all duration-500 border-2 border-[#AD1E23] ${
+                selectedProject
+                  ? "opacity-100 max-h-200 ease-out"
+                  : "opacity-0 max-h-0 border-0 ease-in-out"
+              }`}
+            >
+              <div className="bg-white">
+                <div className="grid md:grid-cols-2 gap-12 p-12">
+                  {/* Left Side - Description */}
+                  <div className="flex flex-col justify-start">
+                    <p className="text-[#AD1E23] leading-relaxed text-base">
+                      {selectedProject?.description}
+                    </p>
+                  </div>
+                  {/* Right Side - Gallery Images */}
+                  <div className="space-y-4">
+                    {selectedProject?.gallery.map((gallery, index) => (
+                      <div
+                        key={index}
+                        className="rounded-lg overflow-hidden shadow-lg relative h-64"
+                      >
+                        <Image
+                          src={gallery}
+                          alt={`${selectedProject.title} Gallery ${index + 1}`}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </section>
         </div>
       </section>
     </div>
