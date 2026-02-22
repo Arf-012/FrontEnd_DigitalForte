@@ -8,9 +8,9 @@ export default function ImageTiles() {
 
   const tiles = [
     {
-      title: "Certificates",
+      title: "Products",
       img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800",
-      href: "/certificates",
+      href: "/product",
     },
     {
       title: "Portfolio",

@@ -50,8 +50,8 @@ export default function Navigation() {
       img: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800",
     },
     {
-      title: "Certificates",
-      href: "/certificates",
+      title: "Products",
+      href: "/product",
       img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800",
     },
   ];
