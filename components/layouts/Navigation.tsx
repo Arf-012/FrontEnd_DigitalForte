@@ -3,11 +3,14 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Navigation() {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +19,7 @@ export default function Navigation() {
       if (currentScrollY > lastScrollY && currentScrollY > 50) {
         // Scrolling down
         setIsVisible(false);
+        setIsNavOpen(false); // Close nav when scrolling down
       } else {
         // Scrolling up
         setIsVisible(true);
@@ -29,130 +33,109 @@ export default function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
-  useEffect(() => {
-    const checkbox = document.getElementById("nav-toggle") as HTMLInputElement;
+  const navItems = [
+    {
+      title: "Home",
+      href: "/",
+      img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800",
+    },
+    {
+      title: "About Us",
+      href: "/about",
+      img: "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800",
+    },
+    {
+      title: "Portfolio",
+      href: "/portfolio",
+      img: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800",
+    },
+    {
+      title: "Products",
+      href: "/product",
+      img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800",
+    },
+  ];
 
-    const handleChange = () => {
-      setIsNavOpen(checkbox?.checked || false);
-    };
-
-    checkbox?.addEventListener("change", handleChange);
-    return () => checkbox?.removeEventListener("change", handleChange);
-  }, []);
-
-  const closeNav = () => {
-    const checkbox = document.getElementById("nav-toggle") as HTMLInputElement;
-    if (checkbox) checkbox.checked = false
-    setIsNavOpen(false);
-  };
+  // Get current page item
+  const currentItem = navItems.find(item => item.href === pathname) || navItems[0];
+  
+  // Get display image - show hovered item's image, or current page's image
+  const displayItem = hoveredItem 
+    ? navItems.find(item => item.href === hoveredItem) 
+    : currentItem;
 
   return (
-    <div className="relative">
-      <input type="checkbox" id="nav-toggle" className="hidden peer" />
-
-      <label htmlFor="nav-toggle" className="cursor-pointer block">
-        <div
-          className={`h-16 bg-[#AD1E23] flex items-center justify-center fixed top-0 left-0 right-0 z-40 transition-transform duration-300 ${
-            isVisible ? "translate-y-0" : "-translate-y-full"
-          }`}
-        >
-          <div className="relative w-10 h-10 hover:scale-110 transition-transform">
-            <Image
-              src="/dfi.png"
-              alt="Digital Forte Indonesia"
-              fill
-              className="object-contain"
-            />
-          </div>
-        </div>
-      </label>
-
-      {/* FULLSCREEN NAVBAR OVERLAY */}
+    <div
+      className="relative"
+      onMouseEnter={() => setIsNavOpen(true)}
+      onMouseLeave={() => {
+        setIsNavOpen(false);
+        setHoveredItem(null);
+      }}
+    >
       <div
-        className={`flex fixed inset-0 z-50 transition-opacity duration-300 ${
-          isNavOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
+        className={`h-16 bg-[#AD1E23] flex items-center justify-center fixed top-0 left-0 right-0 z-40 transition-transform duration-300 ${
+          isVisible ? "translate-y-0" : "-translate-y-full"
         }`}
       >
-        <label
-          htmlFor="nav-toggle"
-          className="absolute top-8 right-8 w-12 h-12 bg-white text-[#AD1E23] flex items-center justify-center text-2xl font-light hover:bg-gray-100 transition-colors cursor-pointer z-10"
-        >
-          ×
-        </label>
+        <div className="relative w-100 h-10 hover:scale-110 transition-transform">
+          <Image
+            src="/dfiv2.png"
+            alt="Digital Forte Indonesia"
+            fill
+            className="object-contain"
+          />
+        </div>
+      </div>
 
-        {/* Grid of navigation items with background images */}
-        <div className="w-full h-full grid grid-rows-2">
-          {/* Top section - Home */}
-          <Link
-            href="/"
-            onClick={closeNav}
-            className="relative flex items-center justify-center overflow-hidden group"
-          >
-            <div className="absolute inset-0 bg-[#AD1E23] mix-blend-multiply z-[1]"></div>
-            <img
-              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200"
-              alt="Home"
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-            <span className="relative z-[2] text-white text-6xl font-bold group-hover:text-gray-200 transition-colors">
-              Home
-            </span>
-          </Link>
+      {/* DROPDOWN MENU */}
+      <div
+        className={`fixed top-16 left-0 right-0 z-30 bg-white shadow-lg transition-all duration-300 ${
+          isNavOpen && isVisible
+            ? "opacity-100 translate-y-0 pointer-events-auto"
+            : "opacity-0 -translate-y-4 pointer-events-none"
+        }`}
+      >
+        <div className="max-w-5xl mx-auto px-8 py-8 grid grid-cols-2 gap-8">
+          {/* Left side - Navigation Links */}
+          <div className="flex flex-col gap-4">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onMouseEnter={() => setHoveredItem(item.href)}
+                  onMouseLeave={() => setHoveredItem(null)}
+                  className={`text-2xl font-semibold text-gray-800 hover:text-[#AD1E23] transition-colors pb-2 border-b-2 ${
+                    isActive
+                      ? "border-[#AD1E23] text-[#AD1E23]"
+                      : "border-transparent"
+                  }`}
+                >
+                  {item.title}
+                </Link>
+              );
+            })}
+          </div>
 
-          {/* Bottom section - 3 columns */}
-          <div className="grid grid-cols-3">
-            {/* Certificates */}
-            <Link
-              href="/certificates"
-              onClick={closeNav}
-              className="relative flex items-center justify-center overflow-hidden group"
-            >
-              <div className="absolute inset-0 bg-[#AD1E23] mix-blend-multiply z-[1]"></div>
-              <img
-                src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800"
-                alt="Certificates"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              <span className="relative z-[2] text-white text-6xl font-bold group-hover:text-gray-200 transition-colors">
-                Certificates
-              </span>
-            </Link>
-
-            {/* Portfolio */}
-            <Link
-              href="/portfolio"
-              onClick={closeNav}
-              className="relative flex items-center justify-center overflow-hidden group"
-            >
-              <div className="absolute inset-0 bg-[#AD1E23] mix-blend-multiply z-[1]"></div>
-              <img
-                src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800"
-                alt="Portfolio"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              <span className="relative z-[2] text-white text-6xl font-bold group-hover:text-gray-200 transition-colors">
-                Portfolio
-              </span>
-            </Link>
-
-            {/* About Us */}
-            <Link
-              href="/about"
-              onClick={closeNav}
-              className="relative flex items-center justify-center overflow-hidden group"
-            >
-              <div className="absolute inset-0 bg-[#AD1E23] mix-blend-multiply z-[1]"></div>
-              <img
-                src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800"
-                alt="About Us"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              <span className="relative z-[2] text-white text-6xl font-bold group-hover:text-gray-200 transition-colors">
-                About Us
-              </span>
-            </Link>
+          {/* Right side - Single Image Display */}
+          <div className="h-64 relative overflow-hidden">
+            {displayItem && (
+              <div className="absolute inset-0">
+                <img
+                  src={displayItem.img}
+                  alt={displayItem.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-[#AD1E23] mix-blend-multiply z-[1]"></div>
+                <div className="absolute inset-0 flex items-center justify-center z-[2]">
+                  <span className="text-white text-3xl font-bold">
+                    {displayItem.title}
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
