@@ -1,17 +1,29 @@
 import Link from "next/link";
+import {
+  WebhookIcon,
+  SmartphoneIcon,
+  AppWindowMacIcon,
+  ChevronsLeftRightIcon,
+  LayoutGridIcon,
+  WholeWordIcon,
+  ContactRoundIcon,
+  UserCog2Icon,
+  BoxIcon,
+  GitForkIcon,
+} from "lucide-react";
 
 export default function Home() {
   const services = [
-    { title: "Web Profile", row: 0, col: 0 },
-    { title: "Mobile Apps (Android)", row: 0, col: 1 },
-    { title: "Mobile Apps (IOS)", row: 0, col: 2 },
-    { title: "Web Apps", row: 0, col: 3 },
-    { title: "Content Maintenance", row: 1, col: 0 },
-    { title: "Wordpress Development", row: 1, col: 1 },
-    { title: "Customers Support", row: 1, col: 2 },
-    { title: "Technical Support", row: 1, col: 3 },
-    { title: "Devbox", row: 2, col: 1 },
-    { title: "Serenity", row: 2, col: 2 },
+    { title: "Web Profile", row: 0, col: 0, icon: WebhookIcon },
+    { title: "Mobile Apps (Android)", row: 0, col: 1, icon: SmartphoneIcon },
+    { title: "Mobile Apps (IOS)", row: 0, col: 2, icon: AppWindowMacIcon },
+    { title: "Web Apps", row: 0, col: 3, icon: ChevronsLeftRightIcon },
+    { title: "Content Maintenance", row: 1, col: 0, icon: LayoutGridIcon },
+    { title: "Wordpress Development", row: 1, col: 1, icon: WholeWordIcon },
+    { title: "Customers Support", row: 1, col: 2, icon: ContactRoundIcon },
+    { title: "Technical Support", row: 1, col: 3, icon: UserCog2Icon },
+    { title: "Devbox", row: 2, col: 1, icon: BoxIcon },
+    { title: "Serenity", row: 2, col: 2, icon: GitForkIcon },
   ];
 
   const accordionItems = [
@@ -89,10 +101,15 @@ export default function Home() {
                 }}
                 className="p-6 h-32 flex flex-col justify-between relative group cursor-pointer transition-all bg-[#AD1E23] text-white hover:bg-white hover:border-2 hover:border-[#AD1E23] hover:text-[#AD1E23]"
               >
+                <div className="absolute bottom-4 left-4 transition-colors duration-300">
+                  <service.icon className="w-6 h-6 text-white group-hover:hidden" />
+                </div>
+
                 {/* Default state - just title and arrow */}
                 <span className="text-sm font-medium leading-tight group-hover:hidden">
                   {service.title}
                 </span>
+
                 <div className="flex justify-end group-hover:hidden">
                   <span className="text-xl">→</span>
                 </div>

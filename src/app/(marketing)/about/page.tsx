@@ -52,7 +52,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-8 grid md:grid-cols-2 gap-16 items-center">
           <div className="flex justify-center">
             <Image
-              src="/images/tech1.webp"
+              src="/images/tech1.jpg"
               alt="Vision and Mission"
               width={800}
               height={600}
@@ -107,7 +107,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-8 grid md:grid-cols-2 gap-16 items-center">
           <div className="flex justify-center">
             <Image
-              src="/images/tech2.webp"
+              src="/images/tech2.jpg"
               alt="Call to Action"
               width={800}
               height={600}
