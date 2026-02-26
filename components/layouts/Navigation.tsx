@@ -69,9 +69,9 @@ export default function Navigation() {
           isVisible ? "translate-y-0" : "-translate-y-full"
         }`}
       >
-        <div className="flex items-center">
+        <div className="flex items-center gap-1">
           {/* Logo */}
-          <Link href="/" className="relative w-10 h-10 hover:scale-110 transition-transform px-15">
+          <Link href="/" className="relative w-10 h-10 hover:scale-110 transition-transform px-20">
             <Image
               src="/dfiv2.png"
               alt="Digital Forte Indonesia"
@@ -105,27 +105,52 @@ export default function Navigation() {
       </nav>
 
       {/* MOBILE NAVBAR */}
-      <div
-        className="md:hidden relative"
-        onMouseEnter={() => setIsMobileNavOpen(true)}
-        onMouseLeave={() => {
-          setIsMobileNavOpen(false);
-          setHoveredItem(null);
-        }}
-      >
+      <div className="md:hidden relative">
         <div
-          className={`h-16 bg-[#AD1E23] flex items-center justify-center fixed top-0 left-0 right-0 z-40 transition-transform duration-300 ${
+          className={`h-16 bg-[#AD1E23] flex items-center justify-between px-8 fixed top-0 left-0 right-0 z-40 transition-transform duration-300 ${
             isVisible ? "translate-y-0" : "-translate-y-full"
           }`}
         >
-          <div className="relative w-10 h-10 hover:scale-110 transition-transform">
+          <Link href="/" className="relative w-30 h-10 hover:scale-110">
             <Image
-              src="/dfi.png"
+              src="/dfiv2.png"
               alt="Digital Forte Indonesia"
               fill
               className="object-contain"
             />
-          </div>
+          </Link>
+
+          {/* Hamburger Menu Button */}
+          <button
+            onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
+            className="text-white hover:bg-white/10 p-2 rounded transition-colors"
+            aria-label="Toggle menu"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              {isMobileNavOpen ? (
+                // X icon when menu is open
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                // Hamburger icon when menu is closed
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
+          </button>
         </div>
 
         {/* MOBILE DROPDOWN MENU */}
@@ -145,15 +170,17 @@ export default function Navigation() {
                   <Link
                     key={item.href}
                     href={item.href}
+                    onClick={() => setIsMobileNavOpen(false)}
                     onMouseEnter={() => setHoveredItem(item.href)}
                     onMouseLeave={() => setHoveredItem(null)}
-                    className={`text-2xl font-semibold text-gray-800 hover:text-[#AD1E23] transition-colors pb-2 border-b-2 ${
+                    className={`text-2xl font-semibold text-gray-800 hover:text-[#AD1E23] transition-colors pb-2 border-b-2 flex items-center justify-between ${
                       isActive
                         ? "border-[#AD1E23] text-[#AD1E23]"
                         : "border-transparent"
                     }`}
                   >
-                    {item.title}
+                    <span>{item.title}</span>
+                    {/* <span className="text-xl">→</span> */}
                   </Link>
                 );
               })}
