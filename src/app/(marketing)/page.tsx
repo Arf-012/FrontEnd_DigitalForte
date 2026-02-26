@@ -1,4 +1,7 @@
+'use client';
+
 import Link from "next/link";
+import { useState } from "react";
 import {
   WebhookIcon,
   SmartphoneIcon,
@@ -13,6 +16,8 @@ import {
 } from "lucide-react";
 
 export default function Home() {
+  const [activeMobileCard, setActiveMobileCard] = useState<number | null>(null);
+
   const services = [
     { title: "Web Profile", row: 0, col: 0, icon: WebhookIcon },
     { title: "Mobile Apps (Android)", row: 0, col: 1, icon: SmartphoneIcon },
@@ -91,7 +96,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-8">
           <h2 className="text-[56px] font-bold mb-16">Services</h2>
 
-          <div className="grid grid-cols-4 gap-3">
+          {/* Desktop view - 4 columns with specific grid positioning */}
+          <div className="hidden md:grid grid-cols-4 gap-3">
             {services.map((service, index) => (
               <div
                 key={index}
@@ -122,6 +128,50 @@ export default function Home() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Mobile view - 2 columns with click interaction */}
+          <div className="grid md:hidden grid-cols-2 gap-3">
+            {services.map((service, index) => {
+              const isActive = activeMobileCard === index;
+              return (
+                <div
+                  key={index}
+                  onClick={() => setActiveMobileCard(isActive ? null : index)}
+                  className={`p-6 flex flex-col justify-between relative cursor-pointer transition-all ${
+                    isActive
+                      ? "bg-white border-2 border-[#AD1E23] text-[#AD1E23] min-h-32"
+                      : "bg-[#AD1E23] text-white h-32"
+                  }`}
+                >
+                  {!isActive && (
+                    <>
+                      <div className="absolute bottom-4 left-4">
+                        <service.icon className="w-6 h-6 text-white" />
+                      </div>
+
+                      {/* Default state - title and arrow */}
+                      <span className="text-sm font-medium leading-tight break-words">
+                        {service.title}
+                      </span>
+
+                      <div className="flex justify-end">
+                        <span className="text-xl">→</span>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Active/clicked state - show description */}
+                  {isActive && (
+                    <div className="text-xs text-gray-700 leading-relaxed break-words">
+                      Pengembangan {service.title.toLowerCase()} profesional
+                      dengan teknologi terkini dan standar kualitas terbaik untuk
+                      mendukung transformasi digital bisnis Anda.
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
