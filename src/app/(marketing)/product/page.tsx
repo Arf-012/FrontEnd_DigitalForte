@@ -43,46 +43,53 @@ export default function ServicesPage() {
   const services = [
     {
       title: "Web Development",
-      description: "Membangun Website Profile bagi Bisnis Anda (Perusahaan maupun Perorangan) sebagai sarana profesional untuk menampilkan identitas brand, profil perusahaan, layanan yang ditawarkan, portofolio, serta informasi kontak guna meningkatkan kepercayaan, kredibilitas, dan jangkauan bisnis di era digital.",
+      description:
+        "Membangun Website Profile bagi Bisnis Anda (Perusahaan maupun Perorangan) sebagai sarana profesional untuk menampilkan identitas brand, profil perusahaan, layanan yang ditawarkan, portofolio, serta informasi kontak guna meningkatkan kepercayaan, kredibilitas, dan jangkauan bisnis di era digital.",
       imageSrc: "/web.avif",
-      imageAlt: "Web Development"
+      imageAlt: "Web Development",
     },
     {
       title: "Mobile Development",
-      description: "Membangun Aplikasi Mobile berbasis Android dan iOS yang dirancang secara modern, responsif, dan fungsional untuk memenuhi kebutuhan bisnis maupun perorangan, meningkatkan efisiensi operasional, memperluas jangkauan pengguna, serta memberikan pengalaman pengguna yang optimal di berbagai perangkat.",
+      description:
+        "Membangun Aplikasi Mobile berbasis Android dan iOS yang dirancang secara modern, responsif, dan fungsional untuk memenuhi kebutuhan bisnis maupun perorangan, meningkatkan efisiensi operasional, memperluas jangkauan pengguna, serta memberikan pengalaman pengguna yang optimal di berbagai perangkat.",
       imageSrc: "/mobile.avif",
-      imageAlt: "Mobile Development"
+      imageAlt: "Mobile Development",
     },
     {
       title: "Software Development",
-      description: "Membangun software berbasis website maupun desktop yang dapat disesuaikan dengan kebutuhan bisnis maupun departemen Anda, guna mempermudah alur kerja, meningkatkan efisiensi kinerja tim, serta mendukung kolaborasi yang lebih efektif dan terintegrasi.",
+      description:
+        "Membangun software berbasis website maupun desktop yang dapat disesuaikan dengan kebutuhan bisnis maupun departemen Anda, guna mempermudah alur kerja, meningkatkan efisiensi kinerja tim, serta mendukung kolaborasi yang lebih efektif dan terintegrasi.",
       imageSrc: "/software.avif",
-      imageAlt: "Software Development"
+      imageAlt: "Software Development",
     },
     {
       title: "Content Maintenance",
-      description: "Membangun Website Profile bagi Bisnis Anda (Perusahaan maupun Perorangan) sebagai sarana profesional untuk menampilkan identitas brand, profil perusahaan, layanan yang ditawarkan, portofolio, serta informasi kontak guna meningkatkan kepercayaan, kredibilitas, dan jangkauan bisnis di era digital.",
+      description:
+        "Membangun Website Profile bagi Bisnis Anda (Perusahaan maupun Perorangan) sebagai sarana profesional untuk menampilkan identitas brand, profil perusahaan, layanan yang ditawarkan, portofolio, serta informasi kontak guna meningkatkan kepercayaan, kredibilitas, dan jangkauan bisnis di era digital.",
       imageSrc: "/content.avif",
-      imageAlt: "Content Maintenance"
+      imageAlt: "Content Maintenance",
     },
     {
       title: "WordPress Development",
-      description: "Membangun Aplikasi Mobile berbasis Android dan iOS yang dirancang secara modern, responsif, dan fungsional untuk memenuhi kebutuhan bisnis maupun perorangan, meningkatkan efisiensi operasional, memperluas jangkauan pengguna, serta memberikan pengalaman pengguna yang optimal di berbagai perangkat.",
+      description:
+        "Membangun Aplikasi Mobile berbasis Android dan iOS yang dirancang secara modern, responsif, dan fungsional untuk memenuhi kebutuhan bisnis maupun perorangan, meningkatkan efisiensi operasional, memperluas jangkauan pengguna, serta memberikan pengalaman pengguna yang optimal di berbagai perangkat.",
       imageSrc: "/wordpress.jpg",
-      imageAlt: "WordPress Development"
+      imageAlt: "WordPress Development",
     },
     {
       title: "Customer Service",
-      description: "Membangun software berbasis website maupun desktop yang dapat disesuaikan dengan kebutuhan bisnis maupun departemen Anda, guna mempermudah alur kerja, meningkatkan efisiensi kinerja tim, serta mendukung kolaborasi yang lebih efektif dan terintegrasi.",
+      description:
+        "Membangun software berbasis website maupun desktop yang dapat disesuaikan dengan kebutuhan bisnis maupun departemen Anda, guna mempermudah alur kerja, meningkatkan efisiensi kinerja tim, serta mendukung kolaborasi yang lebih efektif dan terintegrasi.",
       imageSrc: "/custumer.avif",
-      imageAlt: "Customer Service"
+      imageAlt: "Customer Service",
     },
     {
       title: "Technical Support",
-      description: "Jasa Pembuatan dan Pemeliharaan Jaringan, Instalasi Hardware, serta Software di Perusahaan Anda yang dirancang untuk memastikan sistem berjalan stabil, aman, dan optimal, sehingga mendukung kelancaran operasional serta meningkatkan produktivitas bisnis.",
+      description:
+        "Jasa Pembuatan dan Pemeliharaan Jaringan, Instalasi Hardware, serta Software di Perusahaan Anda yang dirancang untuk memastikan sistem berjalan stabil, aman, dan optimal, sehingga mendukung kelancaran operasional serta meningkatkan produktivitas bisnis.",
       imageSrc: "/technical.png",
-      imageAlt: "Technical Support"
-    }
+      imageAlt: "Technical Support",
+    },
   ];
 
   return (
@@ -101,7 +108,7 @@ export default function ServicesPage() {
 
         <div>
           <FadeUp delay={0.2}>
-            <motion.h1 
+            <motion.h1
               className="text-5xl font-bold mb-6 border-b-4 border-red-500 inline-block pb-2"
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -111,10 +118,15 @@ export default function ServicesPage() {
               Services
             </motion.h1>
           </FadeUp>
-          
+
           <FadeUp delay={0.4}>
             <p className="mt-6 text-gray-700 leading-relaxed">
-              Kami menyediakan berbagai layanan digital terintegrasi yang dirancang khusus untuk mempercepat pertumbuhan bisnis Anda. Mulai dari pengembangan perangkat lunak hingga strategi pemasaran digital, tim kami hadir sebagai sahabat yang memberikan solusi tepat guna, efisien, dan mudah dikelola untuk setiap tantangan teknologi Anda.
+              Kami menyediakan berbagai layanan digital terintegrasi yang
+              dirancang khusus untuk mempercepat pertumbuhan bisnis Anda. Mulai
+              dari pengembangan perangkat lunak hingga strategi pemasaran
+              digital, tim kami hadir sebagai sahabat yang memberikan solusi
+              tepat guna, efisien, dan mudah dikelola untuk setiap tantangan
+              teknologi Anda.
             </p>
           </FadeUp>
         </div>
@@ -123,7 +135,7 @@ export default function ServicesPage() {
       {/* SERVICES SECTION */}
       <section className="max-w-6xl mx-auto px-6 pb-20 relative">
         {/* Timeline */}
-        <motion.div 
+        <motion.div
           className="hidden md:block absolute left-0 top-0 bottom-0 w-16"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -131,7 +143,7 @@ export default function ServicesPage() {
           transition={{ duration: 0.8 }}
         >
           <div className="flex flex-col items-center h-full">
-            <motion.div 
+            <motion.div
               className="w-[2px] bg-red-500 flex-1 relative"
               initial={{ height: 0 }}
               whileInView={{ height: "100%" }}
@@ -145,7 +157,7 @@ export default function ServicesPage() {
                   initial={{ opacity: 0, scale: 0 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: 0.5 + (i * 0.1), duration: 0.3 }}
+                  transition={{ delay: 0.5 + i * 0.1, duration: 0.3 }}
                   className="w-3 h-3 bg-red-500 rounded-full absolute left-1/2 -translate-x-1/2"
                   style={{ top: `${i * 14.28}%` }}
                 />
@@ -162,8 +174,3 @@ export default function ServicesPage() {
     </div>
   );
 }
-
-
-
-
-
