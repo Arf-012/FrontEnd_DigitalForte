@@ -19,8 +19,8 @@ export default function Footer() {
             <p className="text-[#AD1E23] mb-3 font-semibold text-sm">
               Official Contacts
             </p>
-            <p className="mb-1">+62 858-1111-2194</p>
-            <p className="mb-1">Our Address</p>
+            <a href="http://wa.me/85811112194"><p className="mb-1">+62 858-1111-2194</p></a>
+            <p className="mb-1">Jl. Beringin Raya No.131 RW.6, Mekar Jaya, Kec. Sukmajaya, Kota Depok, Jawa Barat 16411</p>
           </div>
 
           {/* Social Media */}
@@ -28,7 +28,7 @@ export default function Footer() {
             <p className="text-[#AD1E23] mb-3 font-semibold text-sm">
               Social Media
             </p>
-            <p className="mb-1">Instagram</p>
+            <a href="https://www.instagram.com/digitalforteindonesia/"><p className="mb-1">Instagram</p></a>
           </div>
         </div>
 
