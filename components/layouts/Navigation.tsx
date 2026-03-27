@@ -17,11 +17,9 @@ export default function Navigation() {
       const currentScrollY = window.scrollY;
 
       if (currentScrollY > lastScrollY && currentScrollY > 50) {
-        // Scrolling down
         setIsVisible(false);
         setIsMobileNavOpen(false);
       } else {
-        // Scrolling up
         setIsVisible(true);
       }
 
@@ -29,7 +27,6 @@ export default function Navigation() {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
@@ -56,9 +53,9 @@ export default function Navigation() {
     },
   ];
 
-  const currentItem = navItems.find(item => item.href === pathname) || navItems[0];
-  const displayItem = hoveredItem 
-    ? navItems.find(item => item.href === hoveredItem) 
+  const currentItem = navItems.find((item) => item.href === pathname) || navItems[0];
+  const displayItem = hoveredItem
+    ? navItems.find((item) => item.href === hoveredItem)
     : currentItem;
 
   return (
@@ -70,8 +67,10 @@ export default function Navigation() {
         }`}
       >
         <div className="flex items-center gap-1">
-          {/* Logo */}
-          <Link href="/" className="relative w-10 h-10 hover:scale-110 transition-transform px-20">
+          <Link
+            href="/"
+            className="relative w-10 h-10 hover:scale-110 transition-transform px-20"
+          >
             <Image
               src="/dfiv2.png"
               alt="Digital Forte Indonesia"
@@ -80,7 +79,6 @@ export default function Navigation() {
             />
           </Link>
 
-          {/* Navigation Links */}
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
@@ -94,9 +92,9 @@ export default function Navigation() {
                 }`}
               >
                 {item.title}
-                {/* Active indicator - red line jutting out from bottom */}
+
                 {isActive && (
-                  <div className="absolute -bottom-1 left-0 right-0 h-1 bg-[#AD1E23]"></div>
+                  <div className="absolute -bottom-1 left-0 right-0 h-1 bg-[#AD1E23]" />
                 )}
               </Link>
             );
@@ -105,13 +103,13 @@ export default function Navigation() {
       </nav>
 
       {/* MOBILE NAVBAR */}
-      <div className="md:hidden relative">
+      <div className="md:hidden">
         <div
-          className={`h-16 bg-[#AD1E23] flex items-center justify-between px-8 fixed top-0 left-0 right-0 z-40 transition-transform duration-300 ${
+          className={`h-16 bg-[#AD1E23] flex items-center justify-between px-6 fixed top-0 left-0 right-0 z-40 transition-transform duration-300 ${
             isVisible ? "translate-y-0" : "-translate-y-full"
           }`}
         >
-          <Link href="/" className="relative w-30 h-10 hover:scale-110">
+          <Link href="/" className="relative w-28 h-8">
             <Image
               src="/dfiv2.png"
               alt="Digital Forte Indonesia"
@@ -120,20 +118,19 @@ export default function Navigation() {
             />
           </Link>
 
-          {/* Hamburger Menu Button */}
+          {/* Hamburger */}
           <button
             onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
-            className="text-white hover:bg-white/10 p-2 rounded transition-colors"
+            className="text-white p-2"
             aria-label="Toggle menu"
           >
             <svg
-              className="w-6 h-6"
+              className="w-7 h-7"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
             >
               {isMobileNavOpen ? (
-                // X icon when menu is open
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -141,7 +138,6 @@ export default function Navigation() {
                   d="M6 18L18 6M6 6l12 12"
                 />
               ) : (
-                // Hamburger icon when menu is closed
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -153,19 +149,20 @@ export default function Navigation() {
           </button>
         </div>
 
-        {/* MOBILE DROPDOWN MENU */}
+        {/* MOBILE MENU */}
         <div
-          className={`fixed top-16 left-0 right-0 z-30 bg-white shadow-lg transition-all duration-300 ${
-            isMobileNavOpen && isVisible
-              ? "opacity-100 translate-y-0 pointer-events-auto"
+          className={`fixed top-16 left-0 right-0 bg-white z-30 transition-all duration-300 ${
+            isMobileNavOpen
+              ? "opacity-100 translate-y-0"
               : "opacity-0 -translate-y-4 pointer-events-none"
           }`}
         >
-          <div className="max-w-5xl mx-auto px-8 py-8 grid grid-cols-2 gap-8">
-            {/* Left side - Navigation Links */}
+          <div className="px-6 py-6 flex flex-col gap-6">
+            {/* LINKS */}
             <div className="flex flex-col gap-4">
               {navItems.map((item) => {
                 const isActive = pathname === item.href;
+
                 return (
                   <Link
                     key={item.href}
@@ -173,35 +170,36 @@ export default function Navigation() {
                     onClick={() => setIsMobileNavOpen(false)}
                     onMouseEnter={() => setHoveredItem(item.href)}
                     onMouseLeave={() => setHoveredItem(null)}
-                    className={`text-2xl font-semibold text-gray-800 hover:text-[#AD1E23] transition-colors pb-2 border-b-2 flex items-center justify-between ${
+                    className={`text-xl font-semibold pb-2 border-b transition-colors ${
                       isActive
-                        ? "border-[#AD1E23] text-[#AD1E23]"
-                        : "border-transparent"
+                        ? "text-[#AD1E23] border-[#AD1E23]"
+                        : "text-gray-800 border-gray-200"
                     }`}
                   >
-                    <span>{item.title}</span>
-                    {/* <span className="text-xl">→</span> */}
+                    {item.title}
                   </Link>
                 );
               })}
             </div>
 
-            {/* Right side - Single Image Display */}
-            <div className="h-64 relative overflow-hidden">
+            {/* IMAGE PREVIEW */}
+            <div className="relative h-40 w-full overflow-hidden rounded-lg">
               {displayItem && (
-                <div className="absolute inset-0">
+                <>
                   <img
                     src={displayItem.img}
                     alt={displayItem.title}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-[#AD1E23] mix-blend-multiply z-[1]"></div>
-                  <div className="absolute inset-0 flex items-center justify-center z-[2]">
-                    <span className="text-white text-3xl font-bold">
+
+                  <div className="absolute inset-0 bg-[#AD1E23] mix-blend-multiply" />
+
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-white text-2xl font-bold">
                       {displayItem.title}
                     </span>
                   </div>
-                </div>
+                </>
               )}
             </div>
           </div>
