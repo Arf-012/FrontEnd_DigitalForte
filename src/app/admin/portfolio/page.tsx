@@ -102,7 +102,7 @@ export default function PortfolioPage() {
     setFTitle(item.title)
     setFDesc(item.description || '')
     setCoverFile(null)
-    setCoverPreview(item.image ? `${API_BASE}/storage/${item.image}` : null)
+    setCoverPreview(item.image ? item.image : null)
     setGalleryFiles([])
     setGalleryPreviews([])
     setView('form')
@@ -148,14 +148,29 @@ export default function PortfolioPage() {
       galleryFiles.forEach((f) => form.append('gallery[]', f))
 
       let res: Response
+      const token = localStorage.getItem('auth_token')
+      
+      const fetchHeaders: HeadersInit = {
+        'Accept': 'application/json',
+      }
+      if (token) {
+        fetchHeaders['Authorization'] = `Bearer ${token}`
+      }
+
       if (editItem) {
         form.append('_method', 'PUT')
         res = await fetch(`${API_BASE}/api/admin/portfolios/${editItem.id}`, {
-          method: 'POST', credentials: 'include', body: form,
+          method: 'POST', 
+          credentials: 'include', 
+          headers: fetchHeaders,
+          body: form,
         })
       } else {
         res = await fetch(`${API_BASE}/api/admin/portfolios`, {
-          method: 'POST', credentials: 'include', body: form,
+          method: 'POST', 
+          credentials: 'include', 
+          headers: fetchHeaders,
+          body: form,
         })
       }
 
@@ -165,7 +180,13 @@ export default function PortfolioPage() {
         await fetchPortfolios()
         setTimeout(() => backToList(), 900)
       } else {
-        showToast(json.message || 'Terjadi kesalahan.', 'error')
+        console.error("Server Error:", json);
+        let errorMsg = json.message || 'Terjadi kesalahan.';
+        if (json.errors) {
+          const firstErrorField = Object.keys(json.errors)[0];
+          errorMsg = json.errors[firstErrorField][0];
+        }
+        showToast(errorMsg, 'error')
       }
     } catch (err) {
       console.error(err)
@@ -179,8 +200,18 @@ export default function PortfolioPage() {
   async function handleDelete(id: number) {
     if (!confirm('Yakin ingin menghapus portfolio ini?')) return
     try {
+      const token = localStorage.getItem('auth_token')
+      const fetchHeaders: HeadersInit = {
+        'Accept': 'application/json',
+      }
+      if (token) {
+        fetchHeaders['Authorization'] = `Bearer ${token}`
+      }
+
       const res = await fetch(`${API_BASE}/api/admin/portfolios/${id}`, {
-        method: 'DELETE', credentials: 'include',
+        method: 'DELETE', 
+        credentials: 'include',
+        headers: fetchHeaders,
       })
       if (res.ok) {
         setPortfolios((prev) => prev.filter((p) => p.id !== id))
@@ -276,7 +307,7 @@ export default function PortfolioPage() {
                     <div className="flex items-start gap-3">
                       {item.image && (
                         <Image
-                          src={`${API_BASE}/storage/${item.image}`}
+                          src={item.image}
                           alt={item.title}
                           width={40}
                           height={40}

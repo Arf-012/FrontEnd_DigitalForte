@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { Project } from "types/project";
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'
+
 export default function Portfolio() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -12,7 +14,7 @@ export default function Portfolio() {
     const fetchProjects = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/portfolios`,
+          `${API_BASE}/api/portfolios`,
         );
         const json = await res.json();
         if (json.success) {
@@ -76,7 +78,7 @@ export default function Portfolio() {
                       alt={project.title}
                       className="object-cover absolute inset-0 w-full h-full"
                     />
-                    <div className="absolute inset-0 bg-[#AD1E23] mix-blend-multiply opacity-80 group-hover:opacity-70 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-[#AD1E23] mix-blend-multiply group-hover:opacity-80 transition-opacity duration-300" />
                     <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent" />
                   </div>
                   <div className="relative h-full p-8 flex flex-col justify-center">
