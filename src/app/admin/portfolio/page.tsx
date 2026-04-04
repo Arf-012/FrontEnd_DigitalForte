@@ -4,7 +4,6 @@ import { useEffect, useState, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { authApi } from 'lib/api/auth'
 import AdminSidebar from 'components/ui/AdminSidebar'
-import Image from 'next/image'
 import type { ApiResponse, PaginatedResponse, Portfolio } from 'types'
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'
@@ -119,6 +118,8 @@ export default function PortfolioPage() {
     if (!file) return
     setCoverFile(file)
     setCoverPreview(URL.createObjectURL(file))
+    // Reset input value so same file can be re-selected
+    e.target.value = ''
   }
 
   function handleGalleryChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -126,6 +127,8 @@ export default function PortfolioPage() {
     if (!files.length) return
     setGalleryFiles((prev) => [...prev, ...files])
     setGalleryPreviews((prev) => [...prev, ...files.map((f) => URL.createObjectURL(f))])
+    // Reset input value so same file can be re-selected
+    e.target.value = ''
   }
 
   function removeGallery(index: number) {
@@ -149,7 +152,7 @@ export default function PortfolioPage() {
 
       let res: Response
       const token = localStorage.getItem('auth_token')
-      
+
       const fetchHeaders: HeadersInit = {
         'Accept': 'application/json',
       }
@@ -158,17 +161,16 @@ export default function PortfolioPage() {
       }
 
       if (editItem) {
-        form.append('_method', 'PUT')
-        res = await fetch(`${API_BASE}/api/admin/portfolios/${editItem.id}`, {
-          method: 'POST', 
-          credentials: 'include', 
+        res = await fetch(`${API_BASE}/api/admin/portfolios/${editItem.id}/update`, {
+          method: 'POST',
+          credentials: 'include',
           headers: fetchHeaders,
           body: form,
         })
       } else {
         res = await fetch(`${API_BASE}/api/admin/portfolios`, {
-          method: 'POST', 
-          credentials: 'include', 
+          method: 'POST',
+          credentials: 'include',
           headers: fetchHeaders,
           body: form,
         })
@@ -180,11 +182,11 @@ export default function PortfolioPage() {
         await fetchPortfolios()
         setTimeout(() => backToList(), 900)
       } else {
-        console.error("Server Error:", json);
-        let errorMsg = json.message || 'Terjadi kesalahan.';
+        console.error("Server Error:", json)
+        let errorMsg = json.message || 'Terjadi kesalahan.'
         if (json.errors) {
-          const firstErrorField = Object.keys(json.errors)[0];
-          errorMsg = json.errors[firstErrorField][0];
+          const firstErrorField = Object.keys(json.errors)[0]
+          errorMsg = json.errors[firstErrorField][0]
         }
         showToast(errorMsg, 'error')
       }
@@ -209,7 +211,7 @@ export default function PortfolioPage() {
       }
 
       const res = await fetch(`${API_BASE}/api/admin/portfolios/${id}`, {
-        method: 'DELETE', 
+        method: 'DELETE',
         credentials: 'include',
         headers: fetchHeaders,
       })
@@ -305,13 +307,15 @@ export default function PortfolioPage() {
                     className="relative bg-[#8B1A1A] rounded-md p-3 pb-10 cursor-pointer"
                   >
                     <div className="flex items-start gap-3">
+                      {/* FIX: Gunakan <img> biasa agar blob URL & external URL sama-sama tampil */}
                       {item.image && (
-                        <Image
+                        <img
                           src={item.image}
                           alt={item.title}
                           width={40}
                           height={40}
                           className="rounded object-cover shrink-0 opacity-90 mt-0.5"
+                          style={{ width: 40, height: 40 }}
                         />
                       )}
                       <div className="min-w-0">
@@ -394,18 +398,21 @@ export default function PortfolioPage() {
               </div>
 
               {/* Cover Image */}
-              <div
-                onClick={() => coverRef.current?.click()}
-                className="w-full h-[140px] bg-[#8B1A1A] rounded flex flex-col items-center justify-center gap-3 mb-5 relative overflow-hidden cursor-pointer"
-              >
+              {/* FIX: Hapus onClick dari div wrapper, gunakan button saja. Ganti next/image → <img> */}
+              <div className="w-full h-[140px] bg-[#8B1A1A] rounded flex flex-col items-center justify-center gap-3 mb-5 relative overflow-hidden">
                 {coverPreview && (
-                  <Image src={coverPreview} alt="Cover" fill className="object-cover" />
+                  <img
+                    src={coverPreview}
+                    alt="Cover"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
                 )}
                 {!coverPreview && (
                   <p className="text-white text-xl font-bold">Cover Image</p>
                 )}
                 <button
-                  onClick={(e) => { e.stopPropagation(); coverRef.current?.click() }}
+                  type="button"
+                  onClick={() => coverRef.current?.click()}
                   className="relative z-10 bg-white text-[#8B1A1A] text-sm font-semibold px-4 py-2 rounded-sm flex items-center gap-1.5 hover:bg-gray-50 transition-colors"
                 >
                   {coverPreview ? 'Change Image' : 'Add Image'}
@@ -433,35 +440,42 @@ export default function PortfolioPage() {
                     className="w-full h-[178px] border border-gray-300 rounded px-3 py-2.5 text-xs resize-none focus:outline-none focus:border-[#8B1A1A] text-gray-700"
                   />
                 </div>
+
+                {/* FIX: Gallery — hapus onClick dari div wrapper, pakai button dedicated, ganti next/image → <img> */}
                 <div>
                   <p className="text-sm font-bold text-[#8B1A1A] mb-2">Gallery</p>
-                  <div
-                    onClick={() => galleryRef.current?.click()}
-                    className="w-full h-[178px] border border-gray-300 rounded flex flex-col items-center justify-center cursor-pointer overflow-hidden"
-                  >
+                  <div className="w-full h-[178px] border border-gray-300 rounded flex flex-col items-center justify-center overflow-hidden">
                     {galleryPreviews.length > 0 ? (
                       <div className="w-full h-full grid grid-cols-3 gap-1 p-1 content-start overflow-y-auto">
                         {galleryPreviews.map((src, i) => (
                           <div key={i} className="relative group">
-                            <img src={src} alt="" className="w-full h-[52px] object-cover rounded-sm" />
+                            <img
+                              src={src}
+                              alt={`gallery-${i}`}
+                              className="w-full h-[52px] object-cover rounded-sm"
+                            />
                             <button
-                              onClick={(e) => { e.stopPropagation(); removeGallery(i) }}
+                              type="button"
+                              onClick={() => removeGallery(i)}
                               className="absolute top-0.5 right-0.5 bg-black/50 text-white rounded-full w-4 h-4 text-[10px] items-center justify-center hidden group-hover:flex"
                             >
                               ×
                             </button>
                           </div>
                         ))}
-                        <div
-                          onClick={(e) => { e.stopPropagation(); galleryRef.current?.click() }}
+                        {/* Tombol tambah foto lagi */}
+                        <button
+                          type="button"
+                          onClick={() => galleryRef.current?.click()}
                           className="w-full h-[52px] border border-dashed border-gray-300 rounded-sm flex items-center justify-center text-gray-400 text-lg hover:border-[#8B1A1A] hover:text-[#8B1A1A] transition-colors"
                         >
                           +
-                        </div>
+                        </button>
                       </div>
                     ) : (
                       <button
-                        onClick={(e) => { e.stopPropagation(); galleryRef.current?.click() }}
+                        type="button"
+                        onClick={() => galleryRef.current?.click()}
                         className="bg-[#8B1A1A] text-white text-sm font-semibold px-4 py-2 rounded-sm flex items-center gap-1.5 hover:bg-[#6B1212] transition-colors"
                       >
                         Add Images
@@ -518,4 +532,4 @@ export default function PortfolioPage() {
       )}
     </div>
   )
-}
+} 
