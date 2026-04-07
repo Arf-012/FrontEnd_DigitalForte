@@ -3,18 +3,22 @@
 import { useState, useEffect } from "react";
 import { Project } from "types/project";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'
+interface Gallery {
+  id: number;
+  image: string;
+}
 
 export default function Portfolio() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [galleries, setGalleries] = useState<Record<number, Gallery[]>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         const res = await fetch(
-          `${API_BASE}/api/portfolios`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/portfolios`,
         );
         const json = await res.json();
         if (json.success) {
@@ -29,11 +33,32 @@ export default function Portfolio() {
     fetchProjects();
   }, []);
 
+  const fetchGallery = async (projectId: number) => {
+    // Don't fetch if already loaded
+    if (galleries[projectId]) return;
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/portfolios/${projectId}/galleries`,
+      );
+      const json = await res.json();
+      if (json.success) {
+        setGalleries((prev) => ({
+          ...prev,
+          [projectId]: json.data.data,
+        }));
+      }
+    } catch (err) {
+      console.error("Failed to fetch gallery:", err);
+    }
+  };
+
   const toggleProject = (project: Project) => {
     if (selectedProject?.id === project.id) {
       setSelectedProject(null);
     } else {
       setSelectedProject(project);
+      fetchGallery(project.id);
     }
   };
 
@@ -69,7 +94,7 @@ export default function Portfolio() {
             {projects.map((project) => (
               <div key={project.id}>
                 <div
-                  className="relative overflow-hidden group cursor-pointer min-h-64 h-86"
+                  className="relative overflow-hidden group cursor-pointer min-h-64 h-64"
                   onClick={() => toggleProject(project)}
                 >
                   <div className="absolute inset-0">
@@ -78,7 +103,7 @@ export default function Portfolio() {
                       alt={project.title}
                       className="object-cover absolute inset-0 w-full h-full"
                     />
-                    <div className="absolute inset-0 bg-[#AD1E23] mix-blend-multiply group-hover:opacity-80 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-[#AD1E23] mix-blend-multiply opacity-80 group-hover:opacity-70 transition-opacity duration-300" />
                     <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent" />
                   </div>
                   <div className="relative h-full p-8 flex flex-col justify-center">
@@ -92,14 +117,35 @@ export default function Portfolio() {
                 <div
                   className={`overflow-hidden transition-all duration-500 border-2 border-[#AD1E23] ${
                     selectedProject?.id === project.id
-                      ? "opacity-100 max-h-96 ease-out"
+                      ? "opacity-100 max-h-[1000px] ease-out"
                       : "opacity-0 max-h-0 border-0 ease-in-out"
                   }`}
                 >
-                  <div className="bg-white p-12">
-                    <p className="text-[#AD1E23] leading-relaxed text-base">
-                      {project.description}
-                    </p>
+                  <div className="bg-white p-12 grid md:grid-cols-2 gap-12">
+                    {/* Left - Description */}
+                    <div className="flex flex-col justify-start">
+                      <p className="text-[#AD1E23] leading-relaxed text-base">
+                        {project.description}
+                      </p>
+                    </div>
+                    {/* Right - Gallery */}
+                    <div className="space-y-4">
+                      {(galleries[project.id] ?? []).map((gallery) => (
+                        <div
+                          key={gallery.id}
+                          className="overflow-hidden shadow-lg relative h-64"
+                        >
+                          <img
+                            src={gallery.image}
+                            alt={`${project.title} gallery`}
+                            className="object-cover absolute inset-0 w-full h-full"
+                          />
+                        </div>
+                      ))}
+                      {galleries[project.id]?.length === 0 && (
+                        <p className="text-gray-400 text-sm">No gallery images yet.</p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
