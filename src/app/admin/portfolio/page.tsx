@@ -1,242 +1,269 @@
-'use client'
+"use client";
 
-import { useEffect, useState, useCallback, useRef } from 'react'
-import { useRouter } from 'next/navigation'
-import { authApi } from 'lib/api/auth'
-import AdminSidebar from 'components/ui/AdminSidebar'
-import type { ApiResponse, PaginatedResponse, Portfolio } from 'types'
+import { useEffect, useState, useCallback, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { authApi } from "lib/api/auth";
+import AdminSidebar from "components/ui/AdminSidebar";
+import type { ApiResponse, PaginatedResponse, Portfolio } from "types";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 
-type View = 'list' | 'form'
+type View = "list" | "form";
 
 export default function PortfolioPage() {
-  const router = useRouter()
+  const router = useRouter();
 
   // ── Auth ────────────────────────────────────────────────────
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   const checkAuth = useCallback(async () => {
     try {
-      const res = await authApi.getCurrentUser()
-      if (!res.success) router.push('/admin/login')
+      const res = await authApi.getCurrentUser();
+      if (!res.success) router.push("/admin/login");
     } catch {
-      router.push('/admin/login')
+      router.push("/admin/login");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [router])
+  }, [router]);
 
   // ── Portfolio list ──────────────────────────────────────────
-  const [portfolios, setPortfolios] = useState<Portfolio[]>([])
-  const [portfolioLoading, setPortfolioLoading] = useState(false)
-  const [selectedId, setSelectedId] = useState<number | null>(null)
-  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
+  const [portfolioLoading, setPortfolioLoading] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const fetchPortfolios = useCallback(async () => {
-    setPortfolioLoading(true)
-    setErrorMsg(null)
+    setPortfolioLoading(true);
+    setErrorMsg(null);
     try {
-      const res = await fetch(`${API_BASE}/api/portfolios`, { credentials: 'include' })
-      const json: ApiResponse<PaginatedResponse<Portfolio>> = await res.json()
+      const res = await fetch(`${API_BASE}/api/portfolios`, {
+        credentials: "include",
+      });
+      const json: ApiResponse<PaginatedResponse<Portfolio>> = await res.json();
       if (json.success) {
-        setPortfolios(json.data.data)
+        setPortfolios(json.data.data);
       } else {
-        setErrorMsg(json.message)
-        setPortfolios([])
+        setErrorMsg(json.message);
+        setPortfolios([]);
       }
     } catch (err) {
-      console.error(err)
-      setErrorMsg('Gagal memuat data portfolio.')
-      setPortfolios([])
+      console.error(err);
+      setErrorMsg("Gagal memuat data portfolio.");
+      setPortfolios([]);
     } finally {
-      setPortfolioLoading(false)
+      setPortfolioLoading(false);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    checkAuth()
-    fetchPortfolios()
-  }, [checkAuth, fetchPortfolios])
+    checkAuth();
+    fetchPortfolios();
+  }, [checkAuth, fetchPortfolios]);
 
   // ── View state ─────────────────────────────────────────────
-  const [view, setView] = useState<View>('list')
-  const [editItem, setEditItem] = useState<Portfolio | null>(null)
+  const [view, setView] = useState<View>("list");
+  const [editItem, setEditItem] = useState<Portfolio | null>(null);
 
   // ── Form state ─────────────────────────────────────────────
-  const [fTitle, setFTitle] = useState('')
-  const [fDesc, setFDesc] = useState('')
-  const [coverFile, setCoverFile] = useState<File | null>(null)
-  const [coverPreview, setCoverPreview] = useState<string | null>(null)
-  const [galleryFiles, setGalleryFiles] = useState<File[]>([])
-  const [galleryPreviews, setGalleryPreviews] = useState<string[]>([])
-  const [saving, setSaving] = useState(false)
-
-  const coverRef = useRef<HTMLInputElement>(null)
-  const galleryRef = useRef<HTMLInputElement>(null)
-  const titleRef = useRef<HTMLInputElement>(null)
+  const [fTitle, setFTitle] = useState("");
+  const [fDesc, setFDesc] = useState("");
+  const [coverFile, setCoverFile] = useState<File | null>(null);
+  const [coverPreview, setCoverPreview] = useState<string | null>(null);
+  const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
+  const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
+  const [saving, setSaving] = useState(false);
+  const [existingGallery, setExistingGallery] = useState<string[]>([]);
+  const coverRef = useRef<HTMLInputElement>(null);
+  const galleryRef = useRef<HTMLInputElement>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
 
   // ── Toast ───────────────────────────────────────────────────
-  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null)
+  const [toast, setToast] = useState<{
+    msg: string;
+    type: "success" | "error";
+  } | null>(null);
 
-  function showToast(msg: string, type: 'success' | 'error') {
-    setToast({ msg, type })
-    setTimeout(() => setToast(null), 3000)
+  function showToast(msg: string, type: "success" | "error") {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3000);
   }
 
   // ── Open form ───────────────────────────────────────────────
   function openCreate() {
-    setEditItem(null)
-    setFTitle('')
-    setFDesc('')
-    setCoverFile(null)
-    setCoverPreview(null)
-    setGalleryFiles([])
-    setGalleryPreviews([])
-    setView('form')
+    setEditItem(null);
+    setFTitle("");
+    setFDesc("");
+    setCoverFile(null);
+    setCoverPreview(null);
+    setExistingGallery([]);
+    setGalleryFiles([]);
+    setGalleryPreviews([]);
+    setView("form");
   }
 
   function openEdit(item: Portfolio) {
-    setEditItem(item)
-    setFTitle(item.title)
-    setFDesc(item.description || '')
-    setCoverFile(null)
-    setCoverPreview(item.image ? item.image : null)
-    setGalleryFiles([])
-    setGalleryPreviews([])
-    setView('form')
+    setEditItem(item);
+    setFTitle(item.title);
+    setFDesc(item.description || "");
+    setCoverFile(null);
+    setCoverPreview(item.image ? item.image : null);
+    setExistingGallery(item.galleries?.map((g) => g.image) ?? []);
+    setGalleryFiles([]);
+    setGalleryPreviews([]);
+    setView("form");
   }
 
   function backToList() {
-    setView('list')
-    setEditItem(null)
+    setView("list");
+    setEditItem(null);
   }
 
   // ── File handlers ───────────────────────────────────────────
   function handleCoverChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setCoverFile(file)
-    setCoverPreview(URL.createObjectURL(file))
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setCoverFile(file);
+    setCoverPreview(URL.createObjectURL(file));
     // Reset input value so same file can be re-selected
-    e.target.value = ''
+    e.target.value = "";
   }
 
   function handleGalleryChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(e.target.files || [])
-    if (!files.length) return
-    setGalleryFiles((prev) => [...prev, ...files])
-    setGalleryPreviews((prev) => [...prev, ...files.map((f) => URL.createObjectURL(f))])
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    setGalleryFiles((prev) => [...prev, ...files]);
+    setGalleryPreviews((prev) => [
+      ...prev,
+      ...files.map((f) => URL.createObjectURL(f)),
+    ]);
     // Reset input value so same file can be re-selected
-    e.target.value = ''
+    e.target.value = "";
+  }
+
+  function removeExistingGallery(index: number) {
+    setExistingGallery((prev) => prev.filter((_, i) => i !== index));
   }
 
   function removeGallery(index: number) {
-    setGalleryFiles((prev) => prev.filter((_, i) => i !== index))
-    setGalleryPreviews((prev) => prev.filter((_, i) => i !== index))
+    setGalleryFiles((prev) => prev.filter((_, i) => i !== index));
+    setGalleryPreviews((prev) => prev.filter((_, i) => i !== index));
   }
 
   // ── Save ────────────────────────────────────────────────────
   async function handleSave() {
-    if (!fTitle.trim()) { showToast('Title wajib diisi.', 'error'); return }
-    if (!fDesc.trim()) { showToast('Description wajib diisi.', 'error'); return }
-    if (!editItem && !coverFile) { showToast('Cover image wajib diunggah.', 'error'); return }
+    if (!fTitle.trim()) {
+      showToast("Title wajib diisi.", "error");
+      return;
+    }
+    if (!fDesc.trim()) {
+      showToast("Description wajib diisi.", "error");
+      return;
+    }
+    if (!editItem && !coverFile) {
+      showToast("Cover image wajib diunggah.", "error");
+      return;
+    }
 
-    setSaving(true)
+    setSaving(true);
     try {
-      const form = new FormData()
-      form.append('title', fTitle.trim())
-      form.append('description', fDesc.trim())
-      if (coverFile) form.append('image', coverFile)
-      galleryFiles.forEach((f) => form.append('gallery[]', f))
+      const form = new FormData();
+      form.append("title", fTitle.trim());
+      form.append("description", fDesc.trim());
+      if (coverFile) form.append("image", coverFile);
+      galleryFiles.forEach((f) => form.append("gallery[]", f));
+      existingGallery.forEach((url) => form.append("existing_gallery[]", url));
 
-      let res: Response
-      const token = localStorage.getItem('auth_token')
+      let res: Response;
+      const token = localStorage.getItem("auth_token");
 
       const fetchHeaders: HeadersInit = {
-        'Accept': 'application/json',
-      }
+        Accept: "application/json",
+      };
       if (token) {
-        fetchHeaders['Authorization'] = `Bearer ${token}`
+        fetchHeaders["Authorization"] = `Bearer ${token}`;
       }
 
       if (editItem) {
-        res = await fetch(`${API_BASE}/api/admin/portfolios/${editItem.id}/update`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: fetchHeaders,
-          body: form,
-        })
+        res = await fetch(
+          `${API_BASE}/api/admin/portfolios/${editItem.id}/update`,
+          {
+            method: "POST",
+            credentials: "include",
+            headers: fetchHeaders,
+            body: form,
+          },
+        );
       } else {
         res = await fetch(`${API_BASE}/api/admin/portfolios`, {
-          method: 'POST',
-          credentials: 'include',
+          method: "POST",
+          credentials: "include",
           headers: fetchHeaders,
           body: form,
-        })
+        });
       }
 
-      const json = await res.json()
+      const json = await res.json();
       if (json.success) {
-        showToast(json.message || 'Portfolio berhasil disimpan!', 'success')
-        await fetchPortfolios()
-        setTimeout(() => backToList(), 900)
+        showToast(json.message || "Portfolio berhasil disimpan!", "success");
+        await fetchPortfolios();
+        setTimeout(() => backToList(), 900);
       } else {
-        console.error("Server Error:", json)
-        let errorMsg = json.message || 'Terjadi kesalahan.'
+        console.error("Server Error:", json);
+        let errorMsg = json.message || "Terjadi kesalahan.";
         if (json.errors) {
-          const firstErrorField = Object.keys(json.errors)[0]
-          errorMsg = json.errors[firstErrorField][0]
+          const firstErrorField = Object.keys(json.errors)[0];
+          errorMsg = json.errors[firstErrorField][0];
         }
-        showToast(errorMsg, 'error')
+        showToast(errorMsg, "error");
       }
     } catch (err) {
-      console.error(err)
-      showToast('Gagal menyimpan portfolio.', 'error')
+      console.error(err);
+      showToast("Gagal menyimpan portfolio.", "error");
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
   }
 
   // ── Delete ──────────────────────────────────────────────────
   async function handleDelete(id: number) {
-    if (!confirm('Yakin ingin menghapus portfolio ini?')) return
+    if (!confirm("Yakin ingin menghapus portfolio ini?")) return;
     try {
-      const token = localStorage.getItem('auth_token')
+      const token = localStorage.getItem("auth_token");
       const fetchHeaders: HeadersInit = {
-        'Accept': 'application/json',
-      }
+        Accept: "application/json",
+      };
       if (token) {
-        fetchHeaders['Authorization'] = `Bearer ${token}`
+        fetchHeaders["Authorization"] = `Bearer ${token}`;
       }
 
       const res = await fetch(`${API_BASE}/api/admin/portfolios/${id}`, {
-        method: 'DELETE',
-        credentials: 'include',
+        method: "DELETE",
+        credentials: "include",
         headers: fetchHeaders,
-      })
+      });
       if (res.ok) {
-        setPortfolios((prev) => prev.filter((p) => p.id !== id))
-        if (selectedId === id) setSelectedId(null)
-        showToast('Portfolio berhasil dihapus!', 'success')
+        setPortfolios((prev) => prev.filter((p) => p.id !== id));
+        if (selectedId === id) setSelectedId(null);
+        showToast("Portfolio berhasil dihapus!", "success");
       } else {
-        showToast('Gagal menghapus portfolio.', 'error')
+        showToast("Gagal menghapus portfolio.", "error");
       }
     } catch (err) {
-      console.error(err)
-      showToast('Gagal menghapus portfolio.', 'error')
+      console.error(err);
+      showToast("Gagal menghapus portfolio.", "error");
     }
   }
 
   // ── Logout ──────────────────────────────────────────────────
   const handleLogout = async () => {
     try {
-      await authApi.logout()
-      router.push('/admin/login')
+      await authApi.logout();
+      router.push("/admin/login");
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
-  }
+  };
 
   // ── Loading screen ──────────────────────────────────────────
   if (loading) {
@@ -247,7 +274,7 @@ export default function PortfolioPage() {
           <p className="text-gray-600">Loading...</p>
         </div>
       </div>
-    )
+    );
   }
 
   // ══════════════════════════════════════════════════════════════
@@ -258,9 +285,8 @@ export default function PortfolioPage() {
       <AdminSidebar onLogout={handleLogout} />
 
       <div className="flex-1 flex flex-col min-h-screen">
-
         {/* ── LIST VIEW ─────────────────────────────────────── */}
-        {view === 'list' && (
+        {view === "list" && (
           <>
             {/* Topbar */}
             <header className="bg-white border-b border-gray-200 h-[46px] flex items-center justify-end px-6">
@@ -268,8 +294,18 @@ export default function PortfolioPage() {
                 onClick={openCreate}
                 className="flex items-center gap-1.5 bg-[#8B1A1A] hover:bg-[#6B1212] text-white text-xs font-medium px-3 py-1.5 rounded transition-colors"
               >
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                <svg
+                  className="w-3 h-3"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2.5}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
                 New Entry +
               </button>
@@ -280,30 +316,54 @@ export default function PortfolioPage() {
               {errorMsg && (
                 <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-md text-xs flex items-center justify-between">
                   {errorMsg}
-                  <button onClick={fetchPortfolios} className="underline font-medium ml-2">Coba lagi</button>
+                  <button
+                    onClick={fetchPortfolios}
+                    className="underline font-medium ml-2"
+                  >
+                    Coba lagi
+                  </button>
                 </div>
               )}
 
               {portfolioLoading ? (
                 [...Array(4)].map((_, i) => (
-                  <div key={i} className="bg-[#8B1A1A] rounded-md h-[88px] animate-pulse opacity-70" />
+                  <div
+                    key={i}
+                    className="bg-[#8B1A1A] rounded-md h-[88px] animate-pulse opacity-70"
+                  />
                 ))
               ) : portfolios.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 text-gray-400">
-                  <svg className="w-10 h-10 mb-3 opacity-25" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                  <svg
+                    className="w-10 h-10 mb-3 opacity-25"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                     />
                   </svg>
                   <p className="text-sm font-medium">Belum ada portfolio.</p>
-                  <p className="text-xs mt-1">Klik <strong>New Entry +</strong> untuk menambah.</p>
+                  <p className="text-xs mt-1">
+                    Klik <strong>New Entry +</strong> untuk menambah.
+                  </p>
                 </div>
               ) : (
                 portfolios.map((item) => (
                   <div
                     key={item.id}
-                    onClick={() => setSelectedId(item.id === selectedId ? null : item.id)}
-                    style={selectedId === item.id ? { outline: '2.5px solid #4A8FD4' } : {}}
+                    onClick={() =>
+                      setSelectedId(item.id === selectedId ? null : item.id)
+                    }
+                    style={
+                      selectedId === item.id
+                        ? { outline: "2.5px solid #4A8FD4" }
+                        : {}
+                    }
                     className="relative bg-[#8B1A1A] rounded-md p-3 pb-10 cursor-pointer"
                   >
                     <div className="flex items-start gap-3">
@@ -319,34 +379,60 @@ export default function PortfolioPage() {
                         />
                       )}
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-white leading-snug truncate">{item.title}</p>
+                        <p className="text-sm font-medium text-white leading-snug truncate">
+                          {item.title}
+                        </p>
                         {item.description && (
-                          <p className="text-xs text-red-200 mt-1 leading-relaxed line-clamp-2">{item.description}</p>
+                          <p className="text-xs text-red-200 mt-1 leading-relaxed line-clamp-2">
+                            {item.description}
+                          </p>
                         )}
                       </div>
                     </div>
 
                     <div className="absolute bottom-2 right-2 flex gap-1">
                       <button
-                        onClick={(e) => { e.stopPropagation(); openEdit(item) }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openEdit(item);
+                        }}
                         className="w-[26px] h-[26px] rounded flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-                        style={{ background: 'rgba(255,255,255,0.15)' }}
+                        style={{ background: "rgba(255,255,255,0.15)" }}
                         title="Edit"
                       >
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                        <svg
+                          className="w-3.5 h-3.5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
                             d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                           />
                         </svg>
                       </button>
                       <button
-                        onClick={(e) => { e.stopPropagation(); handleDelete(item.id) }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(item.id);
+                        }}
                         className="w-[26px] h-[26px] rounded flex items-center justify-center text-white hover:bg-red-500/70 transition-colors"
-                        style={{ background: 'rgba(255,255,255,0.15)' }}
+                        style={{ background: "rgba(255,255,255,0.15)" }}
                         title="Hapus"
                       >
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                        <svg
+                          className="w-3.5 h-3.5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                           />
                         </svg>
@@ -360,17 +446,26 @@ export default function PortfolioPage() {
         )}
 
         {/* ── FORM VIEW (New / Edit) ─────────────────────────── */}
-        {view === 'form' && (
+        {view === "form" && (
           <main className="flex-1 bg-white">
             <div className="max-w-[700px] mx-auto px-7 py-6 pb-16">
-
               {/* Back link */}
               <button
                 onClick={backToList}
                 className="flex items-center gap-1.5 text-[#8B1A1A] text-xs mb-5 hover:underline"
               >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
                 </svg>
                 Back to list without saving changes
               </button>
@@ -389,8 +484,16 @@ export default function PortfolioPage() {
                   onClick={() => titleRef.current?.focus()}
                   className="text-[#8B1A1A] flex-shrink-0"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
                       d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                     />
                   </svg>
@@ -415,9 +518,19 @@ export default function PortfolioPage() {
                   onClick={() => coverRef.current?.click()}
                   className="relative z-10 bg-white text-[#8B1A1A] text-sm font-semibold px-4 py-2 rounded-sm flex items-center gap-1.5 hover:bg-gray-50 transition-colors"
                 >
-                  {coverPreview ? 'Change Image' : 'Add Image'}
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                  {coverPreview ? "Change Image" : "Add Image"}
+                  <svg
+                    className="w-3.5 h-3.5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2.5}
+                      d="M12 4v16m8-8H4"
+                    />
                   </svg>
                 </button>
                 <input
@@ -432,7 +545,9 @@ export default function PortfolioPage() {
               {/* Description + Gallery */}
               <div className="grid grid-cols-2 gap-4 mb-5">
                 <div>
-                  <p className="text-sm font-bold text-[#8B1A1A] mb-2">Description</p>
+                  <p className="text-sm font-bold text-[#8B1A1A] mb-2">
+                    Description
+                  </p>
                   <textarea
                     value={fDesc}
                     onChange={(e) => setFDesc(e.target.value)}
@@ -443,12 +558,33 @@ export default function PortfolioPage() {
 
                 {/* FIX: Gallery — hapus onClick dari div wrapper, pakai button dedicated, ganti next/image → <img> */}
                 <div>
-                  <p className="text-sm font-bold text-[#8B1A1A] mb-2">Gallery</p>
+                  <p className="text-sm font-bold text-[#8B1A1A] mb-2">
+                    Gallery
+                  </p>
                   <div className="w-full h-[178px] border border-gray-300 rounded flex flex-col items-center justify-center overflow-hidden">
-                    {galleryPreviews.length > 0 ? (
+                    {existingGallery.length > 0 ||
+                    galleryPreviews.length > 0 ? (
                       <div className="w-full h-full grid grid-cols-3 gap-1 p-1 content-start overflow-y-auto">
+                        {/* Existing server images */}
+                        {existingGallery.map((src, i) => (
+                          <div key={`existing-${i}`} className="relative group">
+                            <img
+                              src={src}
+                              alt={`existing-${i}`}
+                              className="w-full h-[52px] object-cover rounded-sm"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeExistingGallery(i)}
+                              className="absolute top-0.5 right-0.5 bg-black/50 text-white rounded-full w-4 h-4 text-[10px] items-center justify-center hidden group-hover:flex"
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ))}
+                        {/* Newly added images */}
                         {galleryPreviews.map((src, i) => (
-                          <div key={i} className="relative group">
+                          <div key={`new-${i}`} className="relative group">
                             <img
                               src={src}
                               alt={`gallery-${i}`}
@@ -463,7 +599,7 @@ export default function PortfolioPage() {
                             </button>
                           </div>
                         ))}
-                        {/* Tombol tambah foto lagi */}
+                        {/* Add more button */}
                         <button
                           type="button"
                           onClick={() => galleryRef.current?.click()}
@@ -479,8 +615,18 @@ export default function PortfolioPage() {
                         className="bg-[#8B1A1A] text-white text-sm font-semibold px-4 py-2 rounded-sm flex items-center gap-1.5 hover:bg-[#6B1212] transition-colors"
                       >
                         Add Images
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                        <svg
+                          className="w-3.5 h-3.5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2.5}
+                            d="M12 4v16m8-8H4"
+                          />
                         </svg>
                       </button>
                     )}
@@ -503,16 +649,41 @@ export default function PortfolioPage() {
                 className="flex items-center gap-2 bg-[#8B1A1A] hover:bg-[#6B1212] disabled:opacity-60 text-white text-sm font-semibold px-5 py-2.5 rounded transition-colors"
               >
                 {saving ? (
-                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                  <svg
+                    className="w-4 h-4 animate-spin"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8H4z"
+                    />
                   </svg>
                 ) : (
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2.5}
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                 )}
-                {saving ? 'Menyimpan...' : 'Save Changes'}
+                {saving ? "Menyimpan..." : "Save Changes"}
               </button>
             </div>
           </main>
@@ -521,15 +692,20 @@ export default function PortfolioPage() {
 
       {/* Toast */}
       {toast && (
-        <div className={`fixed bottom-5 right-5 z-50 flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-medium shadow-md
-          ${toast.type === 'success'
-            ? 'bg-white border border-green-200 text-green-800'
-            : 'bg-white border border-red-200 text-red-800'}`}
+        <div
+          className={`fixed bottom-5 right-5 z-50 flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-medium shadow-md
+          ${
+            toast.type === "success"
+              ? "bg-white border border-green-200 text-green-800"
+              : "bg-white border border-red-200 text-red-800"
+          }`}
         >
-          <span className={`w-2 h-2 rounded-full flex-shrink-0 ${toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`} />
+          <span
+            className={`w-2 h-2 rounded-full flex-shrink-0 ${toast.type === "success" ? "bg-green-500" : "bg-red-500"}`}
+          />
           {toast.msg}
         </div>
       )}
     </div>
-  )
-} 
+  );
+}

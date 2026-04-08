@@ -14,11 +14,13 @@ export default function Portfolio() {
   const [galleries, setGalleries] = useState<Record<number, Gallery[]>>({});
   const [loading, setLoading] = useState(true);
 
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'
+
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/portfolios`,
+          `${API_BASE}/api/portfolios`,
         );
         const json = await res.json();
         if (json.success) {
@@ -31,7 +33,7 @@ export default function Portfolio() {
       }
     };
     fetchProjects();
-  }, []);
+  }, [API_BASE]);
 
   const fetchGallery = async (projectId: number) => {
     // Don't fetch if already loaded
@@ -39,7 +41,7 @@ export default function Portfolio() {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/portfolios/${projectId}/galleries`,
+        `${API_BASE}/api/portfolios/${projectId}/galleries`,
       );
       const json = await res.json();
       if (json.success) {

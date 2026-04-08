@@ -57,6 +57,7 @@ export interface Portfolio {
   title: string
   description: string
   image: string
+  galleries: { id: number; image: string }[]
   created_at: string
   updated_at: string
 }

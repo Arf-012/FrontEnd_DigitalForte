@@ -24,7 +24,7 @@ export default function AdminLoginPage() {
       const response = await authApi.login(formData)
 
       if (response.success) {
-        router.push('/admin/dashboard')
+        router.push('/admin/portfolio')
       } else {
         setError(response.message || 'Kredensial akun salah atau belum terdaftar.')
       }
