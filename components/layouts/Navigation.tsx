@@ -66,7 +66,7 @@ export default function Navigation() {
           isVisible ? "translate-y-0" : "-translate-y-full"
         }`}
       >
-        <div className="flex items-center gap-1">
+        <div className="flex items-center">
           <Link
             href="/"
             className="relative w-10 h-10 hover:scale-110 transition-transform px-20"
