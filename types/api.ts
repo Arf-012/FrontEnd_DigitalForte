@@ -26,13 +26,6 @@ export type ApiResponse<T> = ApiSuccess<T> | ApiError
 // Pagination
 // ==========================
 
-// export interface PaginationLink {
-//   url: string | null
-//   label: string
-//   page: number | null
-//   active: boolean
-// }
-
 export interface PaginatedResponse<T> {
   current_page: number
   data: T[]
@@ -63,7 +56,7 @@ export interface Portfolio {
 }
 
 // ==========================
-// File Upload (data only)
+// File Upload 
 // ==========================
 
 export interface FileUploadData {
@@ -71,28 +64,3 @@ export interface FileUploadData {
   fileName: string
   fileSize: number
 }
-
-// // ==========================
-// // Search
-// // ==========================
-
-// export interface SearchParams {
-//   query: string
-//   type?: 'all' | 'services' | 'portfolio' | 'products'
-//   limit?: number
-// }
-
-// export interface SearchResult {
-//   type: 'service' | 'portfolio' | 'product'
-//   id: string
-//   title: string
-//   description: string
-//   url: string
-//   thumbnail?: string
-// }
-
-// export interface SearchData {
-//   results: SearchResult[]
-//   total: number
-//   query: string
-// }

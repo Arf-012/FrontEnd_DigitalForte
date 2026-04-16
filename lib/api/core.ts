@@ -1,5 +1,10 @@
-import { API_URL, defaultHeaders } from './config'
 import type { ApiResponse } from 'types'
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api'
+const defaultHeaders: HeadersInit = {
+  'Content-Type': 'application/json',
+  Accept: 'application/json',
+}
 
 function getAuthToken(): string | null {
   if (typeof window === 'undefined') return null

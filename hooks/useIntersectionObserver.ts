@@ -48,9 +48,7 @@ export function useIntersectionObserver<T extends Element>(
 
   useEffect(() => {
     const node = targetRef?.current
-    if (!node) return
-    if (frozen) return
-    if (typeof IntersectionObserver === 'undefined') return
+    if (!node || frozen) return
 
     const observer = new IntersectionObserver(updateEntry, {
       root,
