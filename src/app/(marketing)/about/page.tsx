@@ -40,39 +40,45 @@ export default function AboutPage() {
       {/* HERO */}
       <section
         ref={heroRef}
-        className={`${fadeUp(heroVisible)} max-w-7xl mx-auto px-6 md:px-8 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center`}
+        className={`${fadeUp(heroVisible)} max-w-7xl mx-auto px-6 md:px-8 py-24 md:py-24 grid md:grid-cols-2 gap-12 items-center`}
       >
         <div>
           <h1 className="accent-line text-3xl md:text-6xl font-bold leading-tight mb-4">
-            Your Best Friend to Help You Digitalize Your Business.
+            About
           </h1>
 
-          <p className="leading-relaxed mb-8 text-sm">
+          <p className="leading-relaxed text-sm">
             Digital Forte Indonesia hadir sebagai mitra terpercaya yang memahami
-            bahwa setiap bisnis memiliki tantangannya sendiri.
+            bahwa setiap bisnis memiliki tantangannya sendiri. Kami bukan
+            sekadar penyedia jasa, melainkan sahabat yang siap mendengarkan dan
+            menyederhanakan teknologi menjadi solusi digital nyata.
           </p>
         </div>
       </section>
 
       {/* ABOUT */}
-      <section
-        ref={aboutRef}
-        className={`${fadeUp(aboutVisible)} py-16 md:py-24`}
-      >
+      <section ref={aboutRef} className={`${fadeUp(aboutVisible)}`}>
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-8 px-6 md:px-0">
           <div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 md:mb-8">
-              About us
+            <h1 className="text-4xl md:text-6xl font-bold mb-4 md:mb-8 md:text-center">
+              History
             </h1>
           </div>
 
           <div>
             <p className="leading-relaxed text-sm">
-              Digital Forte Indonesia hadir sebagai mitra terpercaya yang
-              memahami bahwa setiap bisnis memiliki tantangannya sendiri. Kami
-              bukan sekadar penyedia jasa, melainkan sahabat yang siap
-              mendengarkan dan menyederhanakan teknologi menjadi solusi digital
-              nyata.
+              Didirikan pada tahun 2022, PT Digital Forte Indonesia lahir dengan
+              visi besar untuk menjadi katalisator transformasi digital di
+              Indonesia. Berawal dari Depok, kami memahami bahwa perubahan
+              lanskap teknologi yang cepat menuntut lebih dari sekadar perangkat
+              lunak biasa; dibutuhkan arsitektur digital yang modern, personal,
+              dan terukur. Sejak awal berdiri, kami telah berkembang dari tim
+              pengembang spesialis menjadi penyedia solusi IT menyeluruh yang
+              fokus pada pembuatan aplikasi web dan mobile berdampak tinggi.
+              Komitmen kami tetap sama: menjembatani kesenjangan antara
+              teknologi yang kompleks dengan hasil bisnis yang nyata, demi
+              memberdayakan setiap mitra kami agar unggul di era ekonomi
+              digital.
             </p>
           </div>
         </div>
@@ -84,13 +90,13 @@ export default function AboutPage() {
         className={`${fadeUp(visionVisible)} py-16 md:py-24`}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-8 grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-          <div className="flex justify-center">
+          <div className="flex justify-center ">
             <Image
-              src="/images/tech1.jpg"
+              src="/About.webp"
               alt="Vision and Mission"
               width={800}
               height={600}
-              className="w-full max-w-md md:max-w-xl"
+              className="w-full max-w-md md:max-w-xl "
             />
           </div>
 
@@ -115,42 +121,6 @@ export default function AboutPage() {
                 <li>Memberikan solusi teknologi ke semua kalangan</li>
                 <li>Menjadi perusahaan IT modern</li>
               </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section ref={ctaRef} className={`${fadeUp(ctaVisible)} py-16 md:py-24`}>
-        <h1 className="text-4xl md:text-5xl font-bold text-center mb-12 md:mb-16 px-4">
-          Tingkatkan Efisiensi Kinerja
-        </h1>
-
-        <div className="max-w-7xl mx-auto px-6 md:px-8 grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-          <div className="flex justify-center">
-            <Image
-              src="/images/tech2.jpg"
-              alt="Call to Action"
-              width={800}
-              height={600}
-              className="w-full max-w-md md:max-w-xl"
-            />
-          </div>
-
-          <div>
-            <h2 className="text-lg font-semibold mb-4 text-center">
-              — Digitalize Your Business —
-            </h2>
-
-            <div className="flex flex-col items-center text-center">
-              <p className="text-lg font-semibold mb-6 max-w-md">
-                Dengan semangat anak muda kami ingin mengembangkan teknologi
-                informasi yang dapat dijangkau semua kalangan.
-              </p>
-
-              <button className="bg-[#AD1E23] text-white px-6 md:px-8 py-3 text-sm font-medium flex items-center gap-2 hover:bg-[#8d1519] transition-colors">
-                Tanya sahabat digitalmu →
-              </button>
             </div>
           </div>
         </div>

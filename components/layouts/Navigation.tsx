@@ -34,22 +34,22 @@ export default function Navigation() {
     {
       title: "Home",
       href: "/",
-      img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800",
+      img: "Home.webp",
     },
     {
       title: "About",
       href: "/about",
-      img: "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800",
+      img: "About.webp",
     },
     {
       title: "Portfolio",
       href: "/portfolio",
-      img: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800",
+      img: "Portfolio.webp",
     },
     {
-      title: "Products",
+      title: "Services",
       href: "/product",
-      img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800",
+      img: "Products.webp",
     },
   ];
 

@@ -8,23 +8,23 @@ export default function ImageTiles() {
 
   const tiles = [
     {
-      title: "Products",
-      img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800",
+      title: "Services",
+      img: "Products.webp",
       href: "/product",
     },
     {
       title: "Portfolio",
-      img: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800",
+      img: "Portfolio.webp",
       href: "/portfolio",
     },
     {
       title: "About Us",
-      img: "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800",
+      img: "About.webp",
       href: "/about",
     },
   ];
 
-  const homeImg = "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800";
+  const homeImg = "Home.webp";
 
   return (
     <section className="bg-white py-20">
