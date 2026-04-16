@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Project } from "types/project";
 import { useIsMobile } from "hooks/useIsMobile";
 
@@ -8,6 +9,15 @@ interface Gallery {
   id: number;
   image: string;
 }
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 50 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6 },
+  },
+};
 
 const SkeletonBar = () => (
   <div className="w-full h-64 bg-gray-200 animate-pulse rounded-sm" />
@@ -25,14 +35,12 @@ export default function Portfolio() {
   const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 
   useEffect(() => {
-    // Load cache instantly on mount
     const cached = localStorage.getItem("portfolio_cache");
     if (cached) {
       setProjects(JSON.parse(cached));
       setLoading(false);
     }
 
-    // Then fetch from backend in background
     const fetchProjects = async () => {
       try {
         const res = await fetch(`${API_BASE}/api/portfolios`);
@@ -47,9 +55,7 @@ export default function Portfolio() {
         }
       } catch (err) {
         console.error("Failed to fetch portfolios, using cache:", err);
-        if (!cached) {
-          setProjects([]);
-        }
+        if (!cached) setProjects([]);
         setIsOffline(true);
       } finally {
         setLoading(false);
@@ -62,7 +68,6 @@ export default function Portfolio() {
   const fetchGallery = async (projectId: number) => {
     if (galleries[projectId]) return;
 
-    // Load gallery cache instantly
     const cached = localStorage.getItem(`gallery_cache_${projectId}`);
     if (cached) {
       setGalleries((prev) => ({ ...prev, [projectId]: JSON.parse(cached) }));
@@ -135,7 +140,13 @@ export default function Portfolio() {
             isMobile ? "flex flex-col" : "grid grid-cols-2 gap-12"
           }`}
         >
-          <div className="max-w-md">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="max-w-md"
+          >
             <h1 className="accent-line text-6xl font-bold leading-tight mb-6">
               Our Portfolio
             </h1>
@@ -146,7 +157,7 @@ export default function Portfolio() {
               terukur, menggabungkan presisi teknis dengan visi pertumbuhan
               bisnis jangka panjang.
             </p>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -155,7 +166,7 @@ export default function Portfolio() {
         <div className="max-w-7xl mx-auto px-8">
           <div className="flex flex-col gap-4">
 
-            {/* Skeleton while loading with no cache */}
+            {/* Skeleton */}
             {loading && projects.length === 0 && (
               <>
                 <SkeletonBar />
@@ -172,7 +183,13 @@ export default function Portfolio() {
             )}
 
             {projects.map((project) => (
-              <div key={project.id}>
+              <motion.div
+                key={project.id}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+              >
                 {/* Image Bar */}
                 <div
                   className={`relative overflow-hidden group cursor-pointer ${
@@ -246,7 +263,7 @@ export default function Portfolio() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
