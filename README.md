@@ -27,3 +27,7 @@ Jalankan kode ini di terminal untuk menginstall bagian front-end website.
 ##
 
  - [Repository Backend](https://github.com/Ozan1123/BackEnd_DigitalForte)
+
+---
+
+© 2026 DigitalForte. All rights reserved.
