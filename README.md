@@ -1,9 +1,10 @@
-<h1 align="center">Website Company Profile PT. Digital Forte Indonesia.</h1>
+<h1 align="center">PT. Digital Forte Indonesia.</h1>
+<p align="center">Sebuah redesign dari website Digital Forte Indonesia yang melampauinya.</p>
 
 ###
 
 <div align="center">
-  <img height="200" src="https://cdn.discordapp.com/attachments/1392783462137598043/1471035377547612243/image.png?ex=698d77f4&is=698c2674&hm=de9b5ceb6c1da7c557fdd2e9efcf5a0e80b47aedbb4f0b8aa4d0167228059692&"  />
+  <img height="200" src="https://www.image2url.com/r2/default/images/1776428954302-b504d54e-7133-4f4a-ade2-8ce7d69cf2c9.png"  />
 </div>
 
 ###
@@ -12,10 +13,17 @@
 
 ###
 
-<h2 align="left">Cara Instalasi</h2>
+<h2 align="left">Instalasi</h2>
 
-###
+Jalankan kode ini di terminal untuk menginstall bagian front-end website.
 
-<p align="left">$git clone https://github.com/Arf-012/digital-forte-indonesia.git<br><br>$cd digital-forte-indonesia<br><br>$npm install<br><br>$npm run dev</p>
+```bash
+  $git clone https://github.com/Arf-012/digital-forte-indonesia.git
+  $cd digital-forte-indonesia
+  $npm install
+  $npm run dev
+```
 
-###
+##
+
+ - [Repository Backend](https://github.com/Ozan1123/BackEnd_DigitalForte)
