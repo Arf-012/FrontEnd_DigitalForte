@@ -1,6 +1,7 @@
 import type { ApiResponse } from 'types'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api'
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+
 const defaultHeaders: HeadersInit = {
   'Content-Type': 'application/json',
   Accept: 'application/json',
@@ -31,7 +32,7 @@ async function request<T>(
 ): Promise<ApiResponse<T>> {
   const { method, body, useAuth = false } = options
 
-  const response = await fetch(`${API_URL}${endpoint}`, {
+  const response = await fetch(`${API_BASE}${endpoint}`, {
     method,
     headers: buildHeaders(useAuth),
     body: body ? JSON.stringify(body) : undefined,

@@ -48,7 +48,7 @@ export default function Navigation() {
     },
     {
       title: "Services",
-      href: "/product",
+      href: "/services",
       img: "Products.webp",
     },
   ];
