@@ -25,7 +25,7 @@ Jalankan kode ini di terminal untuk menginstall bagian front-end website.
 ```
 
 ##
-
+<b>JANGAN LUPA INSTALASI REPOSITORY BACKEND UNTUK MENGGUNAKAN ADMIN PANEL/FITUR DINAMIS👌👌</b>
  - [Repository Backend](https://github.com/Ozan1123/BackEnd_DigitalForte)
 
 ---
