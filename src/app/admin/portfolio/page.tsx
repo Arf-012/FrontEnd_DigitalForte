@@ -6,7 +6,7 @@ import { authApi } from "lib/api/auth";
 import AdminSidebar from "components/ui/AdminSidebar";
 import type { ApiResponse, PaginatedResponse, Portfolio } from "types";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
 
 type View = "list" | "form";
 
@@ -37,7 +37,7 @@ export default function PortfolioPage() {
     setPortfolioLoading(true);
     setErrorMsg(null);
     try {
-      const res = await fetch(`${API_BASE}/api/portfolios`, {
+      const res = await fetch(`${API_BASE}/portfolio`, {
         credentials: "include",
       });
       const json: ApiResponse<PaginatedResponse<Portfolio>> = await res.json();
@@ -186,7 +186,7 @@ export default function PortfolioPage() {
 
       if (editItem) {
         res = await fetch(
-          `${API_BASE}/api/admin/portfolios/${editItem.id}/update`,
+          `${API_BASE}/admin/portfolio/${editItem.id}/update`,
           {
             method: "POST",
             credentials: "include",
@@ -195,7 +195,7 @@ export default function PortfolioPage() {
           },
         );
       } else {
-        res = await fetch(`${API_BASE}/api/admin/portfolios`, {
+        res = await fetch(`${API_BASE}/admin/portfolio`, {
           method: "POST",
           credentials: "include",
           headers: fetchHeaders,
@@ -237,7 +237,7 @@ export default function PortfolioPage() {
         fetchHeaders["Authorization"] = `Bearer ${token}`;
       }
 
-      const res = await fetch(`${API_BASE}/api/admin/portfolios/${id}`, {
+      const res = await fetch(`${API_BASE}/admin/portfolio/${id}`, {
         method: "DELETE",
         credentials: "include",
         headers: fetchHeaders,

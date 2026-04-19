@@ -32,7 +32,7 @@ export default function Portfolio() {
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const [isOffline, setIsOffline] = useState(false);
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
 
   useEffect(() => {
     const cached = localStorage.getItem("portfolio_cache");
@@ -43,7 +43,7 @@ export default function Portfolio() {
 
     const fetchProjects = async () => {
       try {
-        const res = await fetch(`${API_BASE}/api/portfolios`);
+        const res = await fetch(`${API_BASE}/portfolio`);
         const json = await res.json();
         if (json.success) {
           const data = json.data.data;
@@ -75,7 +75,7 @@ export default function Portfolio() {
 
     try {
       const res = await fetch(
-        `${API_BASE}/api/portfolios/${projectId}/galleries`
+        `${API_BASE}/portfolio/${projectId}/galleries`
       );
       const json = await res.json();
       if (json.success) {

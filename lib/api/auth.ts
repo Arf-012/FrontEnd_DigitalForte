@@ -1,12 +1,7 @@
 // lib/api/auth.ts
 
 import { apiCore } from './core'
-import type { ApiResponse, User } from 'types'
-
-interface LoginResponse {
-  name:string
-  token: string
-}
+import type { ApiResponse, User, LoginResponse } from 'types'
 
 export const authApi = {
   login: async (

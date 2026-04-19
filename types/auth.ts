@@ -11,12 +11,8 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  success: boolean
-  message: string
-  data: {
-    token: string
-    user: User
-  }
+  name:string
+  token: string
 }
 
 export interface AuthContextType {
