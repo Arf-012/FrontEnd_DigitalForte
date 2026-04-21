@@ -12,6 +12,9 @@ const ibmPlex = IBM_Plex_Sans({
 export const metadata: Metadata = {
   title: "Digital Forte Indonesia",
   description: "Digital Forte Indonesia - Digitalize Your Business",
+  icons: {
+    icon: ""
+  }
 };
 
 export default function RootLayout({
